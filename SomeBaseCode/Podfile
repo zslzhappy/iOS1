@@ -1,0 +1,39 @@
+source 'https://cdn.cocoapods.org/'
+
+
+platform :ios, '10.0'
+
+use_frameworks!
+install! 'cocoapods', :warn_for_unused_master_specs_repo => false
+
+target 'SomeBaseCode' do
+  pod "RxCocoa", "~> 5.1.0"
+  pod "RxGesture", "~> 3.0.1"
+  pod "SnapKit", "~> 5.0.1"
+  pod "SDWebImage", "~> 5.11.1"
+  pod "MJRefresh", "~> 3.7.2"
+  
+  # 一个很好的语法糖工具（利用了Swift协议）
+  pod 'Then'
+  
+  # 提供了额外的请求结果序列化函数（当Alamofire序列化出错时） (对比于 commit d120af1)
+  pod 'Alamofire', :git => 'https://github.com/ThorWang1/Alamofire', :commit => "4b58589"
+  
+  # 利用Runloop实现cell高度的预计算并保证滑动流畅，并提供了自定义的cell高度的计算方法的设置入口（对比于 commit c624e4d）
+  pod 'UITableView+FDTemplateLayoutCell', :git => 'https://github.com/ThorWang1/UITableView-FDTemplateLayoutCell.git', :branch => 'develop'
+  
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '10.0'
+      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+      config.build_settings['EXPANDED_CODE_SIGN_IDENTITY'] = ""
+      config.build_settings['CODE_SIGNING_REQUIRED'] = "NO"
+      config.build_settings['CODE_SIGNING_ALLOWED'] = "NO"
+    end
+  end
+end
+
+

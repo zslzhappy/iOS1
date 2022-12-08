@@ -1,0 +1,71 @@
+PODS:
+  - Alamofire (5.4.4)
+  - MJRefresh (3.7.5)
+  - RxCocoa (5.1.3):
+    - RxRelay (~> 5)
+    - RxSwift (~> 5)
+  - RxGesture (3.0.2):
+    - RxCocoa (~> 5.1)
+    - RxSwift (~> 5.1)
+  - RxRelay (5.1.3):
+    - RxSwift (~> 5)
+  - RxSwift (5.1.3)
+  - SDWebImage (5.11.1):
+    - SDWebImage/Core (= 5.11.1)
+  - SDWebImage/Core (5.11.1)
+  - SnapKit (5.0.1)
+  - Then (3.0.0)
+  - "UITableView+FDTemplateLayoutCell (1.6)"
+
+DEPENDENCIES:
+  - Alamofire (from `https://github.com/ThorWang1/Alamofire`, commit `4b58589`)
+  - MJRefresh (~> 3.7.2)
+  - RxCocoa (~> 5.1.0)
+  - RxGesture (~> 3.0.1)
+  - SDWebImage (~> 5.11.1)
+  - SnapKit (~> 5.0.1)
+  - Then
+  - "UITableView+FDTemplateLayoutCell (from `https://github.com/ThorWang1/UITableView-FDTemplateLayoutCell.git`, branch `develop`)"
+
+SPEC REPOS:
+  trunk:
+    - MJRefresh
+    - RxCocoa
+    - RxGesture
+    - RxRelay
+    - RxSwift
+    - SDWebImage
+    - SnapKit
+    - Then
+
+EXTERNAL SOURCES:
+  Alamofire:
+    :commit: 4b58589
+    :git: https://github.com/ThorWang1/Alamofire
+  "UITableView+FDTemplateLayoutCell":
+    :branch: develop
+    :git: https://github.com/ThorWang1/UITableView-FDTemplateLayoutCell.git
+
+CHECKOUT OPTIONS:
+  Alamofire:
+    :commit: 4b58589
+    :git: https://github.com/ThorWang1/Alamofire
+  "UITableView+FDTemplateLayoutCell":
+    :commit: 6bbcb66d91e666192da91bfb3ca4c0f841e32ae6
+    :git: https://github.com/ThorWang1/UITableView-FDTemplateLayoutCell.git
+
+SPEC CHECKSUMS:
+  Alamofire: f3b09a368f1582ab751b3fff5460276e0d2cf5c9
+  MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
+  RxCocoa: e2ed092d5432e4296aa818021d27de4090ac0354
+  RxGesture: d6bd7447ca3a596c7a9702a6a2b6a2bb5d8bae54
+  RxRelay: 5a18c2eb2d68326ebaf0112f80d837ae41b92b97
+  RxSwift: 915abbdfb62214aa89ccd0b194d44fb478019b27
+  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
+  "UITableView+FDTemplateLayoutCell": 5c949b4a5059c404b442926c0e80f81d10a2d66f
+
+PODFILE CHECKSUM: 129f01b44945b888443d1cadcc9a0ad0d04cf9cb
+
+COCOAPODS: 1.11.3
