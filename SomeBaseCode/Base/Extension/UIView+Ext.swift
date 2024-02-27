@@ -384,7 +384,6 @@ public protocol LoadViewFromNib where Self: UIView {
 }
 
 extension UIView: LoadViewFromNib {
-  //MARK: 从nib文件创建某个类的ui
   public static func createInstanceFromNib() -> Self? {
     return Bundle.locatedBundle(for: self).loadViewFromNib(nibName: String(describing: self))
   }
