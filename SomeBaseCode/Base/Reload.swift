@@ -7,6 +7,7 @@
 //
 
 import Foundation
+//MARK: 代码中的print函数仅在debug模式下生效
 
 #if !DEBUG
 public func print(items: Any..., separator: String = "", terminator: String = "") { }

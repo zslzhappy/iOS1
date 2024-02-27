@@ -22,6 +22,7 @@ extension ObservableType{
                     
   故为ObservableType 添加以下方法
    */
+  //MARK: 对ObservableType的扩展
   public func subscribeOnNext(onNext: @escaping ((Element) -> Void)) -> Disposable{
     return subscribe(onNext: onNext)
   }

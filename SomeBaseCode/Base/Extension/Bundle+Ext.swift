@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+//MARK: Bundle的扩展
 
 public extension Bundle{
   func loadViewFromNib<T:UIView>(nibName:String,owner: Any? = nil, options: [UINib.OptionsKey : Any]? = nil)  -> T?{

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+//MARK: Array的一些扩展
 public extension Array {
 
   subscript(safe index: Int) -> Element? {

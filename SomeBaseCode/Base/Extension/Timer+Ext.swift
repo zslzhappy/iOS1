@@ -9,7 +9,7 @@
 import Foundation
 
 public extension Timer {
-  
+  //MARK: 解决计时器和target之间循环引用的问题
   /// 使用block的方式创建一个timer(适配ios9及以上)  block内的引用对象避免强引用
   static func safeRetainSheduledTimer(timeInterval ti: TimeInterval, block: @escaping () -> Void, userInfo: Any?, repeats yesOrNo: Bool) -> Timer {
     let executor = InnerExecutor()

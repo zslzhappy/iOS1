@@ -101,8 +101,8 @@ public extension UIStackView{
     }
   }
 }
-/// 容器view 用于做stackview的ArrangedSubview
-public class MarginView:UIView{
+//MARK: 容器view,可以对contentView的padding轻松调整
+public class ViewWrapper:UIView{
   let contentView:UIView
   public init(_ view:UIView,frame:CGRect,topInset:CGFloat = 0,bottomInset:CGFloat = 0,leftInset:CGFloat = 0,rightInset:CGFloat = 0){
     self.contentView = view
@@ -171,7 +171,7 @@ public class MarginView:UIView{
 
 public extension UIView{
   var marginSuperView:UIView?{
-    if let s =  (self.superview as? MarginView){
+    if let s =  (self.superview as? ViewWrapper){
       return s
     }
     return nil

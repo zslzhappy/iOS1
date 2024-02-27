@@ -26,6 +26,7 @@ public extension Dictionary {
   mutating func merge(_ dict: [Key: Value]) {
     self.merge(dict) { (_, new) in new }
   }
+  //MARK: merge时对不同的key做不同的处理
   /// 对不同的key可做不同处理
   @inlinable mutating func merge(with other: [Key : Value], uniquingKeysWith combine: (Key, Value, Value) throws -> Value) rethrows{
     other.keys.forEach { key in
@@ -46,43 +47,4 @@ public extension Dictionary {
     }
   }
 }
-
-public extension Dictionary {
-  mutating func merge( _ value: String,key:Key,separator:String = ",") {
-    if let v = self[key] as? String{
-      self[key] = (v + separator + value) as? Value
-    }else{
-      self[key] = value as? Value
-    }
-  }
-}
-
-/// [String:Any]类型生成唯一的描述字符串
-public extension  Dictionary {
-  func sortedDescription() -> String {
-    guard let self = self as? [String:Any] else {
-      return ""
-    }
-    var parametersArray = [String]()
-    let sortedKeysMap = self.sorted(by: { $0.key.localizedStandardCompare($1.key) == ComparisonResult.orderedAscending })
-    sortedKeysMap.forEach { (k,v) in
-      if let value = v as? [String: Any] {
-        parametersArray.append("\"\(k)\":\(value.sortedDescription())")
-      } else if let values = v as? [[String: Any]] {
-        var arr =  [String]()
-        values.forEach({ (map) in
-          arr.append("\(map.sortedDescription())")
-        })
-        let s = "{\(arr.joined(separator: ","))}"
-        parametersArray.append("\"\(k)\":\(s)")
-      } else if let value = v as? [Any] {
-        parametersArray.append("\"\(k)\":\(value)")
-      } else {
-        parametersArray.append("\"\(k)\":\"\(v)\"")
-      }
-    }
-    return"{\(parametersArray.joined(separator: ","))}"
-  }
-}
-
 

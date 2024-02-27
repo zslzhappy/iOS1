@@ -167,7 +167,7 @@ public extension UIView {
 
 
 public extension UIView {
-  
+  //MARK: 约束获取
   /// 某约束 高、宽 ... (个别复杂UI 获取到的约束可能不符合预期)
   func constraintFixed(of attribute: NSLayoutConstraint.Attribute) -> NSLayoutConstraint? {
     if let cons = constraintIsFirstItem(of:attribute, in: superview?.constraints ?? []){
@@ -183,22 +183,6 @@ public extension UIView {
   }
 
   
-  // 以下方法有问题 ，视图a上有 子视图 a1 a2 ， a2的top是a1的bottom加2 ， a2又有子视图a21  a21的top是a2的top加4，若想更新a1 a2的间距  用a2.constraintV2(of:.top)实则获取到的是a21和a2的top约束
-  @available(*, deprecated, message: "已废弃 使用constraintFixed")
-  /// 某约束 高、宽 ...
-  func constraintV2(of attribute: NSLayoutConstraint.Attribute) -> NSLayoutConstraint? {
-    if let cons = constraintIsFirstItem(of:attribute, in: constraints){
-      return cons
-    }
-    if let cons = constraintIsFirstItem(of: attribute, in: superview?.constraints ?? []){
-      return cons
-    }
-    if let cons = constraintIsSecondItem(of:attribute, in: constraints){
-      return cons
-    }
-    return constraintIsSecondItem(of:attribute, in: superview?.constraints ?? [])
-  }
-
   private func constraintIsFirstItem(of attribute: NSLayoutConstraint.Attribute, in constraints: [NSLayoutConstraint]) -> NSLayoutConstraint? {
     let cons = constraints.first { constraint in
       if fixedAttributes(for: attribute).contains(constraint.firstAttribute), let firstItem = constraint.firstItem as? NSObject, firstItem == self {
@@ -233,30 +217,6 @@ public extension UIView {
     return attributes
   }
   
-  @available(*, deprecated, message: "已废弃 使用constraintV2")
-  // 有问题
-  /// 某约束 高、宽 ...
-  func constraint(of attribute: NSLayoutConstraint.Attribute) -> NSLayoutConstraint? {
-    let cons = constraint(of: attribute, in: constraints)
-    if let cons = cons {
-      return cons
-    }
-    return constraint(of: attribute, in: superview?.constraints ?? [])
-  }
-  
-  @available(*, deprecated, message: "已废弃")
-  //  有问题
-  private func constraint(of attribute: NSLayoutConstraint.Attribute, in constraints: [NSLayoutConstraint]) -> NSLayoutConstraint? {
-    let cons = constraints.first { constraint in
-      if constraint.firstAttribute == attribute, let firstItem = constraint.firstItem as? NSObject, firstItem == self {
-        return true
-      } else if constraint.secondAttribute == attribute, let secondItem = constraint.secondItem as? NSObject, secondItem == self {
-        return true
-      }
-      return false
-    }
-    return cons
-  }
 }
 
 public extension UIView {
@@ -317,7 +277,7 @@ public extension UIView {
   }
 
 
-  /// 清除xib中label的文本内容
+  //MARK: 清除xib中label的文本内容
   func clearNibFileLabelText() {
     allSubviews().forEach { v in
       if let label = v as? UILabel {
@@ -326,21 +286,21 @@ public extension UIView {
     }
   }
 
-  /// 清除xib中view的背景色
+  //MARK: 清除xib中view的背景色
   func clearNibFileViewBackGroundColor() {
     allSubviews().forEach { v in
       v.setBackColor(color: nil)
     }
   }
 
-  /// 清除xib中view的背景色
+  //MARK: 清除xib中view的背景色
   func clearNibFileViewBackGroundColor(excludeViews: [UIView]) {
     allSubviews().filter({ !excludeViews.contains($0) }).forEach { v in
       v.setBackColor(color: nil)
     }
   }
 
-  /// 清除xib中button的title
+  //MARK: 清除xib中button的title
   func clearNibFileButtonTitle() {
     allSubviews().forEach { v in
       if let btn = v as? UIButton {
@@ -406,158 +366,17 @@ public extension UIView {
     return gradient
   }
 
-  /// 是否显示在屏幕上
-  var isDisplayedInScreen: Bool {
-    if isHidden {
-      return false
-    }
-    if superview.isNone {
-      return false
-    }
-    if superview!.isHidden{
-      return false
-    }
-    let screenRect = UIScreen.main.bounds
-    let rect = convert(bounds, to: nil)
-    if rect.isEmpty || rect.isNull {
-      return false
-    }
-  
-    if rect.size == CGSize.zero {
-      return false
-    }
-    let intersectionRect = rect.intersection(screenRect)
-    if intersectionRect.isEmpty || intersectionRect.isNull {
-      return false
-    }
-    return true
-  }
-
-  /// 已被添加到父视图
-  var addedToSuperView: Bool {
-    return superview.isSome
-  }
 }
 
 public extension UIView {
   //MARK:  获取自动布局的视图的高
   /// 得到某一视图的自适应的高（调用系统方法 效率高于 func getHeightFor(limitWidth width: CGFloat) ） 求cell高则由cell的contentView调用此方法
   func getHeightFixedFor(limitWidth width: CGFloat) -> CGFloat {
-     // height传0
+    
     return systemLayoutSizeFitting(CGSize(width: width, height: 0),withHorizontalFittingPriority: .required,verticalFittingPriority: .fittingSizeLevel).height
     
-    //以下几种情况也能得到正确的高 （使用首页YMBHomeItemsViewCell测试）
-//    1.为collectionViewCell的contentView设宽度
-//    {
-//      let cell = YMBHomeItemsViewCell()
-//      cell.updateConstraintForCalculateHeight()
-//      cell.contentView.snp.remakeConstraints { make in
-//        make.edges.equalToSuperview()
-//        make.width.equalTo(itemWidth)
-//      }
-//         cell.contentView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-//  }
-//    2.
-//    systemLayoutSizeFitting(CGSize(width: itemWidth, height: 0))
-//    3. // 即使高度不够最终实际高
-//    systemLayoutSizeFitting(CGSize(width: itemWidth, height: 20),withHorizontalFittingPriority: .required,verticalFittingPriority: .fittingSizeLevel)
-    
-    
-//    但如下代码得到的高则不正确
-//    1. systemLayoutSizeFitting(CGSize(width: itemWidth, height: 10000))
-//    2.
-//     传一个固定的很大的值在某些情况下可能有问题（例如某一view其内部有两个子控件可以确定view的底 但其底部跟view的底部关系是小于等于 ，则获取到的高则受高度的入参影响）
-//    systemLayoutSizeFitting(CGSize(width: itemWidth, height: 10000),withHorizontalFittingPriority: .required,verticalFittingPriority: .fittingSizeLevel)
-    
   }
   
-  // 优先使用UIView调用此方法（对于将view添加在cell上,而非cell的contentView上的cell得到的值可能不正确，xib创建的cell调用此方法结果正确）
-  /// 某一view在限定宽度下显示时的高度（一般在view填充数据后调用此方法返回合适的显示高度）
-  @available(*, deprecated, message: "推荐使用 func getHeightFixedFor(limitWidth:)")
-  func getHeightFor(limitWidth width: CGFloat) -> CGFloat {
-    setConstraintsAndLayout(limitWidth: width)
-    let h = bounds.height
-    removeFromSuperview()
-    return h
-  }
-  
-  func getHeightBySubviewMaxHeight(limitWidth width: CGFloat)->CGFloat{
-    setConstraintsAndLayout(limitWidth: width)
-    var view = self
-    if let cell = self as? UICollectionViewCell {
-      view = cell.contentView
-    }else if let cell = self as? UITableViewCell {
-      view = cell.contentView
-    }
-    // 获取需要的高度
-    var maxY: CGFloat = 0.0
-    view.subviews.forEach { obj in
-      let tempY = obj.frame.maxY
-      if tempY > maxY {
-        maxY = tempY
-      }
-    }
-    removeFromSuperview()
-    return maxY
-  }
-  
-  private func setConstraintsAndLayout(limitWidth width:CGFloat){
-    let v = UIView()
-    v.snp.makeConstraints { make in
-      make.width.equalTo(width)
-    }
-    // UITableViewCell 设定其contentView宽 否则得不到正确高度（eg:imageView + label + label 竖向布局） ，对于某些cell的contentView并不跟cell等大的情况 视图自行处理之
-    if let cell = self as? UITableViewCell {
-      cell.contentView.snp.remakeConstraints { make in
-        make.edges.equalToSuperview()
-        make.width.equalTo(width)
-      }
-
-      // 以上代码对contentView重设约束 务必要重设约束，只填加一个宽的约束得到的值不正确（如下代码，YMBGoodsStoryCell有体现 ）
-//      cell.contentView.snp.makeConstraints { make in
-//        make.width.equalTo(width)
-//      }
-    }
-    if let cell = self as? UICollectionViewCell {
-      cell.contentView.snp.remakeConstraints { make in
-        make.edges.equalToSuperview()
-        make.width.equalTo(width)
-      }
-    }
-    v.addSubV(self)
-    snp.makeConstraints { make in
-      make.left.right.top.equalToSuperview()
-      make.width.equalTo(width)
-    }
-    v.setNeedsLayout()
-    v.layoutIfNeeded()
-    
-   
-  }
-  /// 某一有其自身宽度或子视图内容可以确定宽度的view显示时的尺寸（一般在view填充数据后调用此方法）
-  func getSize() -> CGSize {
-    let v = UIView()
-
-    if let cell = self as? UITableViewCell {
-      // 重设contentView约束 否则得不到正确结果
-      cell.contentView.snp.remakeConstraints { make in
-        make.edges.equalToSuperview()
-      }
-    } else if let cell = self as? UICollectionViewCell {
-      // 重设contentView约束 否则得不到正确结果
-      cell.contentView.snp.remakeConstraints { make in
-        make.edges.equalToSuperview()
-      }
-    }
-    v.addSubV(self)
-    snp.makeConstraints { make in
-      make.left.top.equalToSuperview()
-    }
-    v.layoutIfNeeded()
-    let size = bounds.size
-    removeFromSuperview()
-    return size
-  }
 }
 
 public protocol LoadViewFromNib where Self: UIView {
@@ -565,6 +384,7 @@ public protocol LoadViewFromNib where Self: UIView {
 }
 
 extension UIView: LoadViewFromNib {
+  //MARK: 从nib文件创建某个类的ui
   public static func createInstanceFromNib() -> Self? {
     return Bundle.locatedBundle(for: self).loadViewFromNib(nibName: String(describing: self))
   }
@@ -633,7 +453,7 @@ public enum UIViewSubViewConstraint{
 
 public extension UIView{
   
-  /// 添加子视图并设置约束
+  //MARK: 添加子视图并设置约束
   @discardableResult
   func addSubView(_ view:UIView,makeConstraints closure:(_ make: ConstraintMaker) -> Void) -> Self{
     self.addSubV(view)
@@ -724,6 +544,7 @@ public extension UIView{
 }
 
 public extension UIView{
+  //MARK: 利用RxSwift添加tap手势
   func addTapGesture(_ tapHandler:@escaping()->()){
     isUserInteractionEnabled = true
     let tap = UITapGestureRecognizer()
@@ -747,7 +568,7 @@ public enum ViewShadowOrientation {
 
 extension ConstraintViewDSL{
   // 若未设置过约束 直接调用remakeConstraints(_:)会闪退
-  /// 安全地remak约束
+  //MARK: 安全地remak约束
   public func safeRemakeConstraints(_ closure: (_ make: ConstraintMaker) -> Void) {
     makeConstraints { _ in
     }

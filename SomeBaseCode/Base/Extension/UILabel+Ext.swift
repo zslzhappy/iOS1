@@ -61,19 +61,11 @@ public extension UILabel{
   }
 }
 
-extension UILabel{
-  /// 某一range的字符在label中的frame
-  public func boundingRectForCharacter(at range:NSRange) ->CGRect{
-    guard let attributedText = attributedText else{ return CGRect.zero }
-    let textStorage = NSTextStorage(attributedString: attributedText)
-    let layoutManager = NSLayoutManager()
-    textStorage.addLayoutManager(layoutManager)
-    let textContainer = NSTextContainer(size: self.bounds.size)
-    textContainer.lineFragmentPadding = 0
-    layoutManager.addTextContainer(textContainer)
-    var glyphRange = NSRange(location: 0, length: 0)
-    layoutManager.characterRange(forGlyphRange: range, actualGlyphRange: &glyphRange)
-    return layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
-  }
-}
 
+//MARK: UILabel的一些扩展方法
+private func test(){
+  _ = UILabel()
+    .setTextFont(font: UIFont.systemFont(ofSize: 15))
+    .setTextColor(color: UIColor.red)
+    .setText("123")
+}
