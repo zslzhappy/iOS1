@@ -370,7 +370,7 @@ public extension UIView {
 
 public extension UIView {
   //MARK:  获取自动布局的视图的高
-  /// 得到某一视图的自适应的高（调用系统方法 效率高于 func getHeightFor(limitWidth width: CGFloat) ） 求cell高则由cell的contentView调用此方法
+  /// 得到某一视图的自适应的高 求cell高则由cell的contentView调用此方法
   func getHeightFixedFor(limitWidth width: CGFloat) -> CGFloat {
     
     return systemLayoutSizeFitting(CGSize(width: width, height: 0),withHorizontalFittingPriority: .required,verticalFittingPriority: .fittingSizeLevel).height
